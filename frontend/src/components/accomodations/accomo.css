@@ -1,0 +1,189 @@
+.acc {
+  --gap: 20px;
+  --radius: 20px;
+  padding: 64px 50px 80px;
+  color: #1a1a1a;
+  background: #fff;
+}
+
+.acc__title {
+  margin: 0 0 25px;
+  margin-left: 60px;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 300;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+/* ---------- Carousel ---------- */
+.acc__carousel {
+  position: relative;
+  max-width: 1300px;  
+  margin: 0 auto;
+}
+
+.acc__viewport {
+  overflow: hidden;
+  border-radius: var(--radius);
+}
+
+.acc__track {
+  display: flex;
+  gap: var(--gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  transform: translateX(
+    calc(var(--index) * -1 * (100% + var(--gap)) / var(--visible))
+  );
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.acc__card {
+  position: relative;
+  flex: 0 0 calc((100% - (var(--visible) - 1) * var(--gap)) / var(--visible));
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: #d9d3cb; /* tampil saat foto belum ada */
+}
+
+.acc__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.acc__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0) 55%);
+  pointer-events: none;
+}
+
+.acc__name {
+  position: absolute;
+  left: 30px;
+  bottom: 28px;
+  margin: 0;
+  font-size: clamp(1.3rem, 2vw, 1.75rem);
+  font-weight: 300;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.acc__link {
+  position: absolute;
+  right: 24px;
+  bottom: 26px;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  color: #f4cfc0;
+  transition: transform 0.25s ease;
+}
+
+.acc__link:hover {
+  transform: translateX(4px);
+}
+
+/* ---------- Tombol panah geser ---------- */
+.acc__nav {
+  position: absolute;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 60px;
+  padding: 0;
+  border: 0;
+  background: #fff;
+  color: #444;
+  cursor: pointer;
+  transform: translateY(-50%);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+}
+
+.acc__nav--next {
+  right: -20px;
+  border-radius: 4px 0 0 4px;
+}
+
+.acc__nav--prev {
+  left: -20px;
+  border-radius: 0 4px 4px 0;
+}
+
+/* ---------- Garis navigasi ---------- */
+.acc__progress {
+  position: relative;
+  width: 225px;
+  height: 2px;
+  margin: 28px auto 0;
+  background: #1a1a1a;
+}
+
+.acc__thumb {
+  position: absolute;
+  top: -2px;
+  left: 0;
+  height: 6px;
+  background: #1a1a1a;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ---------- Tombol Book Now ---------- */
+.acc__book {
+  display: block;
+  width: fit-content;
+  margin: 32px auto 0;
+  padding: 16px 56px;
+  background: #1a1a1a;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-decoration: none;
+  transition: background 0.25s ease;
+}
+
+.acc__book:hover {
+  background: #3a3a3a;
+}
+
+/* ---------- Fokus keyboard ---------- */
+.acc__link:focus-visible,
+.acc__nav:focus-visible,
+.acc__book:focus-visible {
+  outline: 2px solid #1a1a1a;
+  outline-offset: 3px;
+}
+
+.acc__link:focus-visible {
+  outline-color: #fff;
+}
+
+/* ---------- Responsif ---------- */
+@media (max-width: 600px) {
+  .acc {
+    padding: 48px 20px 64px;
+  }
+  .acc__nav--next {
+    right: -12px;
+  }
+  .acc__nav--prev {
+    left: -12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .acc__track,
+  .acc__thumb,
+  .acc__link {
+    transition: none;
+  }
+}
