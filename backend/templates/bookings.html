@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Riwayat Booking</title>
+</head>
+<body>
+
+<h1>Riwayat Booking</h1>
+
+{% for booking in bookings %}
+
+    <h2>Kamar {{ booking.nomor_kamar }}</h2>
+
+    <p>Nama: {{ booking.nama }}</p>
+    <p>Tipe: {{ booking.tipe_kamar }}</p>
+    <p>Check-in: {{ booking.tanggal_checkin }}</p>
+    <p>Check-out: {{ booking.tanggal_checkout }}</p>
+    <p>Total: Rp{{ booking.total_harga }}</p>
+    <p>Status: {{ booking.status }}</p>
+
+    {% if booking.status == "Menunggu" %}
+        <a href="/bayar/{{ booking.id_booking }}">
+            <button>Bayar Sekarang</button>
+        </a>
+    {% else %}
+        <p>✅ Sudah Lunas</p>
+    {% endif %}
+
+    <hr>
+
+{% else %}
+
+    <p>Belum ada booking.</p>
+
+{% endfor %}
+
+</body>
+</html>

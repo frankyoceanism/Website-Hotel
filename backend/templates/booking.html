@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Booking Kamar</title>
+</head>
+<body>
+
+    <h1>Booking Kamar Hotel</h1>
+
+    <p>Kamar: {{ room.nomor_kamar }}</p>
+    <p>Tipe: {{ room.tipe_kamar }}</p>
+    <p>Harga per malam: Rp{{ room.harga_per_malam }}</p>
+
+    <form method="POST" action="/bookings/{{ room.id_room }}">
+
+        <label>Check-in:</label>
+        <input type="date" name="tanggal_checkin" required>
+
+        <br><br>
+
+        <label>Check-out:</label>
+        <input type="date" name="tanggal_checkout" required>
+
+        <br><br>
+
+        <button type="submit">Booking</button>
+
+    </form>
+
+</body>
+</html>
