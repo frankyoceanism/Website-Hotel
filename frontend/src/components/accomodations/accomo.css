@@ -136,13 +136,12 @@
   transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ---------- Tombol Book Now ---------- */
-.acc__book {
+.acc_rooms {
   display: block;
   width: fit-content;
   margin: 32px auto 0;
   padding: 16px 56px;
-  background: #1a1a1a;
+  background: #a98b73;
   color: #fff;
   font-size: 0.85rem;
   font-weight: 500;
@@ -151,8 +150,8 @@
   transition: background 0.25s ease;
 }
 
-.acc__book:hover {
-  background: #3a3a3a;
+.acc_rooms:hover {
+  background: #a59282;
 }
 
 /* ---------- Fokus keyboard ---------- */

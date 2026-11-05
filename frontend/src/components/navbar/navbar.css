@@ -44,7 +44,10 @@
   color: inherit;
   text-decoration: none;
   font-size: 16px;
+  gap: 40px;
+  border-bottom-color: #b58a8f;
 }
+
 
 .nav-actions a:hover {
   color: #a98b73;
@@ -68,4 +71,9 @@
 
 .navbar-transparent .btn-text {
   color: white;
+}
+
+.navbar-transparent .btn-text:hover {
+  background-color: #a98b73;
+  border-color: #a98b73;
 }

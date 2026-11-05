@@ -83,13 +83,6 @@ export default function Accommodations() {
                 <img className="acc__img" src={room.image} alt={`Kamar ${room.name}`} />
                 <div className="acc__overlay" />
                 <h3 className="acc__name">{room.name}</h3>
-                <Link
-                  to="/rooms"
-                  className="acc__link"
-                  aria-label={`Lihat kamar ${room.name}`}
-                >
-                  <ChevronRight />
-                </Link>
               </li>
             ))}
           </ul>
@@ -127,8 +120,8 @@ export default function Accommodations() {
         />
       </div>
 
-      <Link to="/bookings" className="acc__book">
-        BOOK NOW
+      <Link to="/rooms" className="acc_rooms">
+        DISCOVER MORE
       </Link>
     </section>
   );
