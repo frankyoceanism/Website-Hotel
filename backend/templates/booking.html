@@ -1,31 +1,67 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Booking Kamar</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block title %}Booking Kamar{% endblock %}
 
+{% block content %}
+<div class="card medium">
     <h1>Booking Kamar Hotel</h1>
-
-    <p>Kamar: {{ room.nomor_kamar }}</p>
+    <h2>Kamar {{ room.nomor_kamar }}</h2>
     <p>Tipe: {{ room.tipe_kamar }}</p>
-    <p>Harga per malam: Rp{{ room.harga_per_malam }}</p>
+    <p>Harga per malam: <strong>{{ room.harga_per_malam|rupiah }}</strong></p>
 
-    <form method="POST" action="/bookings/{{ room.id_room }}">
+    <form method="POST" action="/bookings/{{ room.id_room }}" id="form-booking">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
-        <label>Check-in:</label>
+        <label>Check-in</label>
         <input type="date" name="tanggal_checkin" required>
 
-        <br><br>
-
-        <label>Check-out:</label>
+        <label>Check-out</label>
         <input type="date" name="tanggal_checkout" required>
 
-        <br><br>
+        <h2>Add-on Tambahan</h2>
+        <p class="muted">Pilih layanan tambahan yang kamu inginkan.</p>
 
-        <button type="submit">Booking</button>
+        {% for addon in addons %}
+            <div class="addon">
+                <input type="checkbox" id="addon{{ addon.id_addon }}"
+                    name="addons" value="{{ addon.id_addon }}">
+                <label for="addon{{ addon.id_addon }}">
+                    <strong>{{ addon.nama_addon }}</strong><br>
+                    {{ addon.harga|rupiah }}
+                </label>
+            </div>
+        {% else %}
+            <p>Belum ada layanan add-on.</p>
+        {% endfor %}
 
+        <button class="btn full" type="submit">Booking Sekarang</button>
     </form>
 
-</body>
-</html>
+    <p><a class="link" href="/hotel">&larr; Kembali ke daftar kamar</a></p>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const checkin = document.querySelector('[name="tanggal_checkin"]');
+    const checkout = document.querySelector('[name="tanggal_checkout"]');
+
+    function toISO(d) {
+        const off = d.getTimezoneOffset() * 60000;
+        return new Date(d - off).toISOString().slice(0, 10);
+    }
+
+    checkin.min = toISO(new Date());
+
+    checkin.addEventListener("change", () => {
+        if (!checkin.value) return;
+        const next = new Date(checkin.value);
+        next.setDate(next.getDate() + 1);
+        checkout.min = toISO(next);
+        if (checkout.value && checkout.value < checkout.min) checkout.value = "";
+    });
+
+    document.getElementById("form-booking").addEventListener("submit", e => {
+        e.target.querySelector(".btn").disabled = true;
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Terjadi Masalah{% endblock %}
+
+{% block content %}
+<div class="card narrow center">
+    <h1>{{ kode }}</h1>
+    <p>{{ pesan }}</p>
+
+    {% if petunjuk %}
+        <p style="background:#fff1d6; color:#91631a; padding:12px; border-radius:8px;">
+            {{ petunjuk }}
+        </p>
+    {% endif %}
+
+    {% if detail %}
+        <p class="muted" style="font-size:13px; word-break:break-word;">
+            Detail (hanya tampil saat debug): {{ detail }}
+        </p>
+    {% endif %}
+
+    {% if session.id_user %}
+        <a class="btn" href="/hotel">Ke Daftar Kamar</a>
+        <a class="btn" href="/riwayat">Riwayat Booking</a>
+    {% else %}
+        <a class="btn" href="/login">Login</a>
+    {% endif %}
+</div>
+{% endblock %}

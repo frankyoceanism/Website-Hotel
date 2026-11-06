@@ -1,29 +1,26 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Hotel</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block title %}Daftar Kamar{% endblock %}
 
+{% block content %}
 <h1>Daftar Kamar Hotel</h1>
+<p class="muted">Pilih kamar terbaik untuk pengalaman menginap kamu.</p>
 
-{% for room in rooms %}
+<div class="grid">
+    {% for room in rooms %}
+        <div class="card">
+            <h2>Kamar {{ room.nomor_kamar }}</h2>
+            <p>Tipe kamar: {{ room.tipe_kamar }}</p>
+            <p class="price">{{ room.harga_per_malam|rupiah }} <small>/ malam</small></p>
 
-    <h2>Kamar {{ room.nomor_kamar }}</h2>
-
-    <p>Tipe: {{ room.tipe_kamar }}</p>
-    <p>Harga: Rp{{ room.harga_per_malam }}</p>
-    <p>Status: {{ room.status }}</p>
-
-    {% if room.status == "Tersedia" %}
-        <a href="/bookings/{{ room.id_room }}">
-            <button>Pesan Kamar</button>
-        </a>
-    {% endif %}
-
-    <hr>
-
-{% endfor %}
-
-</body>
-</html>
+            {% if room.status == "Tersedia" %}
+                <span class="badge ok">Tersedia</span><br>
+                <a class="btn" href="/bookings/{{ room.id_room }}">Pesan Kamar</a>
+            {% else %}
+                <span class="badge bad">Tidak Tersedia</span>
+            {% endif %}
+        </div>
+    {% else %}
+        <p>Belum ada kamar yang tersedia.</p>
+    {% endfor %}
+</div>
+{% endblock %}

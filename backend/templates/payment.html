@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Pembayaran{% endblock %}
+
+{% block content %}
+<div class="card narrow">
+    <h2 class="center">Konfirmasi Pembayaran</h2>
+    <p class="center muted">Pembayaran ini merupakan simulasi.</p>
+
+    <div style="background:#f3f6fa; padding:20px; border-radius:10px;">
+        <p><b>ID Booking:</b> {{ booking.id_booking }}</p>
+        <p><b>Nama:</b> {{ booking.nama }}</p>
+        <p><b>Nomor Kamar:</b> {{ booking.nomor_kamar }}</p>
+        <p><b>Tipe Kamar:</b> {{ booking.tipe_kamar }}</p>
+        <p><b>Check-in:</b> {{ booking.tanggal_checkin }}</p>
+        <p><b>Check-out:</b> {{ booking.tanggal_checkout }}</p>
+    </div>
+
+    <p class="center">Total Pembayaran</p>
+    <p class="total center" style="font-size:26px;">{{ booking.total_harga|rupiah }}</p>
+
+    <form method="POST" onsubmit="this.querySelector('.btn').disabled = true;">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <button type="submit" class="btn full">Bayar Sekarang</button>
+    </form>
+
+    <p class="center"><a class="link" href="/riwayat">Batal</a></p>
+</div>
+{% endblock %}

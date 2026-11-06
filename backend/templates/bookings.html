@@ -1,38 +1,43 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Riwayat Booking</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block title %}Riwayat Booking{% endblock %}
 
+{% block content %}
 <h1>Riwayat Booking</h1>
 
 {% for booking in bookings %}
+    {% set st = booking.status | lower %}
 
-    <h2>Kamar {{ booking.nomor_kamar }}</h2>
+    <div class="card">
+        <h2>Booking #{{ booking.id_booking }}</h2>
+        <p>Nama: {{ booking.nama }}</p>
+        <p>Kamar: {{ booking.nomor_kamar }} ({{ booking.tipe_kamar }})</p>
+        <p>Check-in: {{ booking.tanggal_checkin }}</p>
+        <p>Check-out: {{ booking.tanggal_checkout }}</p>
+        <p class="total">Total: {{ booking.total_harga|rupiah }}</p>
 
-    <p>Nama: {{ booking.nama }}</p>
-    <p>Tipe: {{ booking.tipe_kamar }}</p>
-    <p>Check-in: {{ booking.tanggal_checkin }}</p>
-    <p>Check-out: {{ booking.tanggal_checkout }}</p>
-    <p>Total: Rp{{ booking.total_harga }}</p>
-    <p>Status: {{ booking.status }}</p>
+        {% if st == "lunas" %}
+            <span class="badge ok">Sudah Lunas</span>
+        {% elif st == "batal" %}
+            <span class="badge bad">Dibatalkan</span>
+        {% else %}
+            <span class="badge">{{ booking.status }}</span><br>
+            <a class="btn" href="/bayar/{{ booking.id_booking }}">Bayar Sekarang</a>
+        {% endif %}
 
-    {% if booking.status == "Menunggu" %}
-        <a href="/bayar/{{ booking.id_booking }}">
-            <button>Bayar Sekarang</button>
-        </a>
-    {% else %}
-        <p>✅ Sudah Lunas</p>
-    {% endif %}
-
-    <hr>
+        {% if st != "batal" and (session.role == "admin" or st == "menunggu") %}
+            <form class="inline" method="POST" action="/batal/{{ booking.id_booking }}"
+                onsubmit="return confirm('Batalkan booking ini?')">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <button type="submit" class="btn danger">Batalkan</button>
+            </form>
+        {% endif %}
+    </div>
 
 {% else %}
-
-    <p>Belum ada booking.</p>
-
+    <div class="card">
+        <h3>Belum ada booking</h3>
+        <p>Kamu belum memiliki riwayat booking.</p>
+        <a class="btn" href="/hotel">Cari Kamar</a>
+    </div>
 {% endfor %}
-
-</body>
-</html>
+{% endblock %}

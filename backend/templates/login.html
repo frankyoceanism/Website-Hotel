@@ -1,30 +1,25 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Login Hotel</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
 
-<h1>Login</h1>
+{% block content %}
+<div class="card narrow">
+    <h1 class="center">Hotel Login</h1>
+    <p class="center muted">Silakan masuk ke akun kamu</p>
 
-<form method="POST">
+    <form method="POST" action="/login">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
-    <label>Username:</label><br>
-    <input type="text" name="username" required>
-    <br><br>
+        <label>Username</label>
+        <input type="text" name="username" autocomplete="username" required>
 
-    <label>Password:</label><br>
-    <input type="password" name="password" required>
-    <br><br>
+        <label>Password</label>
+        <input type="password" name="password" autocomplete="current-password" required>
 
-    <button type="submit">Login</button>
+        <button type="submit" class="btn full">Login</button>
+    </form>
 
-</form>
-
-<p>
-    Belum punya akun?
-    <a href="/register">Register</a>
-</p>
-
-</body>
-</html>
+    <p class="center">
+        Belum punya akun? <a class="link" href="/register">Daftar sekarang</a>
+    </p>
+</div>
+{% endblock %}

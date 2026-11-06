@@ -1,24 +1,31 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Register hotel</title>
-    <link rel="stylesheet" href="/static/style.css">
-</head>
-<body>
+{% extends "base.html" %}
+{% block title %}Register{% endblock %}
 
-    <h1>Register</h1>
+{% block content %}
+<div class="card narrow">
+    <h1 class="center">Register</h1>
 
     <form method="POST" action="/register">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
-        <input type="text" name="nama" placeholder="Nama" required>
+        <label>Nama Lengkap</label>
+        <input type="text" name="nama" maxlength="100" autocomplete="name" required>
 
-        <input type="text" name="username" placeholder="Username" required>
+        <label>Username</label>
+        <input type="text" name="username"
+            pattern="[A-Za-z0-9_.\-]{3,50}" minlength="3" maxlength="50"
+            title="3-50 karakter: huruf, angka, titik, garis bawah, atau strip"
+            autocomplete="username" required>
 
-        <input type="password" name="password" placeholder="Password" required>
+        <label>Password</label>
+        <input type="password" name="password" minlength="6"
+            title="Minimal 6 karakter" autocomplete="new-password" required>
 
-        <button type="submit">Daftar</button>
-
+        <button type="submit" class="btn full">Daftar</button>
     </form>
 
-</body>
-</html>
+    <p class="center">
+        Sudah punya akun? <a class="link" href="/login">Login</a>
+    </p>
+</div>
+{% endblock %}

@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+{% block title %}Dashboard Admin{% endblock %}
+
+{% block content %}
+<h1>Dashboard Admin</h1>
+<p>Selamat datang, {{ session.nama }}.</p>
+
+<div class="summary">
+    <div class="card"><h3>Total Kamar</h3><p>{{ rooms|length }}</p></div>
+    <div class="card"><h3>Total User</h3><p>{{ users|length }}</p></div>
+    <div class="card"><h3>Total Booking</h3><p>{{ bookings|length }}</p></div>
+    <div class="card"><h3>Total Add-on</h3><p>{{ addons|length }}</p></div>
+</div>
+
+<!-- KAMAR -->
+<div class="card">
+    <h2>Master Data Kamar</h2>
+
+    <div class="table-wrap">
+    <table>
+        <tr>
+            <th>ID</th><th>Nomor</th><th>Tipe</th>
+            <th>Harga per Malam</th><th>Status</th><th>Aksi</th>
+        </tr>
+        {% for room in rooms %}
+        <tr>
+            <td>{{ room.id_room }}</td>
+            <td>{{ room.nomor_kamar }}</td>
+            <td>{{ room.tipe_kamar }}</td>
+            <td>{{ room.harga_per_malam|rupiah }}</td>
+            <td>
+                <span class="badge {{ 'ok' if room.status == 'Tersedia' else 'bad' }}">
+                    {{ room.status }}
+                </span>
+            </td>
+            <td>
+                <form class="inline" method="POST"
+                    action="/admin/kamar/{{ room.id_room }}/status">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                    {% if room.status == 'Tersedia' %}
+                        <input type="hidden" name="status" value="Tidak Tersedia">
+                        <button class="btn small danger" type="submit">Nonaktifkan</button>
+                    {% else %}
+                        <input type="hidden" name="status" value="Tersedia">
+                        <button class="btn small" type="submit">Aktifkan</button>
+                    {% endif %}
+                </form>
+            </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6">Belum ada data kamar.</td></tr>
+        {% endfor %}
+    </table>
+    </div>
+
+    <h3>Tambah Kamar</h3>
+    <form method="POST" action="/admin/kamar/tambah" class="form-row">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <div><label>Nomor Kamar</label>
+            <input type="text" name="nomor_kamar" maxlength="10" required></div>
+        <div><label>Tipe</label>
+            <input type="text" name="tipe_kamar" maxlength="50" required></div>
+        <div><label>Harga per Malam</label>
+            <input type="number" name="harga_per_malam" min="1" step="1000" required></div>
+        <div><button class="btn" type="submit">Tambah</button></div>
+    </form>
+</div>
+
+<!-- USER -->
+<div class="card">
+    <h2>Master Data User</h2>
+    <div class="table-wrap">
+    <table>
+        <tr><th>ID User</th><th>Nama</th><th>Username</th><th>Role</th></tr>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.id_user }}</td>
+            <td>{{ user.nama }}</td>
+            <td>{{ user.username }}</td>
+            <td>{{ user.role }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="4">Belum ada data user.</td></tr>
+        {% endfor %}
+    </table>
+    </div>
+</div>
+
+<!-- BOOKING -->
+<div class="card">
+    <h2>Master Data Booking</h2>
+    <div class="table-wrap">
+    <table>
+        <tr>
+            <th>ID</th><th>User</th><th>Kamar</th><th>Check-in</th>
+            <th>Check-out</th><th>Total</th><th>Status</th><th>Aksi</th>
+        </tr>
+        {% for booking in bookings %}
+        <tr>
+            <td>{{ booking.id_booking }}</td>
+            <td>{{ booking.nama }}</td>
+            <td>{{ booking.nomor_kamar }}</td>
+            <td>{{ booking.tanggal_checkin }}</td>
+            <td>{{ booking.tanggal_checkout }}</td>
+            <td>{{ booking.total_harga|rupiah }}</td>
+            <td>{{ booking.status }}</td>
+            <td>
+                {% if booking.status|lower != 'batal' %}
+                <form class="inline" method="POST" action="/batal/{{ booking.id_booking }}"
+                    onsubmit="return confirm('Batalkan booking ini?')">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                    <button class="btn small danger" type="submit">Batalkan</button>
+                </form>
+                {% endif %}
+            </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="8">Belum ada data booking.</td></tr>
+        {% endfor %}
+    </table>
+    </div>
+</div>
+
+<!-- ADD-ON -->
+<div class="card">
+    <h2>Master Data Add-on</h2>
+    <div class="table-wrap">
+    <table>
+        <tr><th>ID</th><th>Nama Add-on</th><th>Harga</th></tr>
+        {% for addon in addons %}
+        <tr>
+            <td>{{ addon.id_addon }}</td>
+            <td>{{ addon.nama_addon }}</td>
+            <td>{{ addon.harga|rupiah }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="3">Belum ada data add-on.</td></tr>
+        {% endfor %}
+    </table>
+    </div>
+
+    <h3>Tambah Add-on</h3>
+    <form method="POST" action="/admin/addon/tambah" class="form-row">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <div><label>Nama Add-on</label>
+            <input type="text" name="nama_addon" maxlength="100" required></div>
+        <div><label>Harga</label>
+            <input type="number" name="harga" min="1" step="1000" required></div>
+        <div><button class="btn" type="submit">Tambah</button></div>
+    </form>
+</div>
+{% endblock %}
