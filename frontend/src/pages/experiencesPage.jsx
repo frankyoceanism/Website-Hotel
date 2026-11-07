@@ -4,7 +4,7 @@ import experiences from '../data/experience.js'
 export default function ExperiencesPage() {
   return (
     <>
-    <Navbar solid/>
+      <Navbar solid/>
       <main>
         {experiences.map((e) => (
           <section key={e.id}>

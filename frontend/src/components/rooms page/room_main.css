@@ -1,0 +1,293 @@
+
+.rooms-page {
+  width: 100%;
+  padding: 124px 5.2% 100px;
+  background: #ffffff;
+  color: #77716c;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+/* INTRO */
+
+.rooms-intro {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.rooms-intro h1 {
+  font-size: 36px;
+  font-weight: 400;
+  margin-bottom: 18px;
+}
+
+.rooms-intro p {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #89837e;
+}
+
+
+/* ALL STAYS */
+
+.all-stays {
+  max-width: 500px;
+  margin: 48px auto 50px;
+  text-align: center;
+}
+
+.all-stays h2 {
+  font-size: 29px;
+  font-weight: 400;
+  margin-bottom: 22px;
+}
+
+.amenities-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 70px;
+}
+
+.amenity-item {
+  padding: 11px 0;
+  border-top: 1px solid #c9aa94;
+  font-size: 13px;
+  text-align: left;
+}
+
+.amenity-item:nth-child(even) {
+  text-align: left;
+}
+
+.amenity-item:last-child,
+.amenity-item:nth-last-child(2) {
+  border-bottom: 1px solid #c9aa94;
+}
+
+.reserve-button {
+  margin-top: 30px;
+  padding: 11px 34px;
+  background: transparent;
+  border: 1px solid #a9876d;
+  color: #77716c;
+  font-family: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.reserve-button:hover {
+  background: #a9876d;
+  color: #ffffff;
+}
+
+
+/* ROOM GRID */
+
+.room-categories {
+  width: 100%;
+}
+
+.room-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: 36px;
+  row-gap: 50px;
+}
+
+.room-card {
+  min-width: 0;
+}
+
+.room-card-image {
+  width: 100%;
+  aspect-ratio: 0.87;
+  overflow: hidden;
+  background: #eee8e2;
+}
+
+.room-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.room-card:hover .room-card-image img {
+  transform: scale(1.035);
+}
+
+.room-card-content {
+  padding: 17px 8px 0;
+}
+
+.room-category {
+  display: block;
+  font-family: Arial, sans-serif;
+  font-size: 9px;
+  letter-spacing: 1.2px;
+  font-weight: 600;
+  color: #96908b;
+}
+
+.room-card-content h3 {
+  font-size: 19px;
+  font-weight: 400;
+  margin: 10px 0 13px;
+}
+
+.room-card-content p {
+  font-size: 11px;
+  line-height: 1.5;
+  color: #89837e;
+  margin-bottom: 19px;
+}
+
+.room-details-button {
+  padding: 10px 13px;
+  background: #ae8d73;
+  border: 1px solid #ae8d73;
+  color: white;
+  font-family: inherit;
+  font-size: 11px;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.room-details-button:hover {
+  background: #8f7058;
+  border-color: #8f7058;
+}
+
+
+/* EXPERIENCES OFFER */
+
+.experience-offer {
+  max-width: 1000px;
+  margin: 75px auto 0;
+  padding: 26px 20px;
+  border-top: 1px solid #c9aa94;
+  border-bottom: 1px solid #c9aa94;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.experience-offer h2 {
+  font-size: 27px;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.experience-offer p {
+  font-size: 13px;
+  color: #89837e;
+}
+
+.experience-offer button {
+  padding: 10px 25px;
+  border: 1px solid #ae8d73;
+  background: transparent;
+  color: #77716c;
+  font-family: inherit;
+  font-size: 11px;
+  cursor: pointer;
+  transition: 0.25s ease;
+  white-space: nowrap;
+}
+
+.experience-offer button:hover {
+  background: #ae8d73;
+  color: white;
+}
+
+
+/* TABLET */
+
+@media (max-width: 900px) {
+  .rooms-page {
+    padding: 65px 5% 80px;
+  }
+
+  .room-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 40px 25px;
+  }
+
+  .experience-offer {
+    flex-wrap: wrap;
+  }
+}
+
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+  .rooms-page {
+    padding: 100px 6% 65px;
+  }
+
+  .rooms-intro h1 {
+    font-size: 27px;
+  }
+
+  .rooms-intro p {
+    font-size: 12px;
+  }
+
+  .all-stays {
+    margin: 40px auto;
+  }
+
+  .all-stays h2 {
+    font-size: 24px;
+  }
+
+  .amenities-grid {
+    column-gap: 20px;
+  }
+
+  .amenity-item {
+    font-size: 11px;
+  }
+
+  .room-grid {
+    grid-template-columns: 1fr;
+    gap: 38px;
+  }
+
+  .room-card-image {
+    aspect-ratio: 0.95;
+  }
+
+  .room-card-content {
+    padding-left: 3px;
+    padding-right: 3px;
+  }
+
+  .room-card-content h3 {
+    font-size: 20px;
+  }
+
+  .room-card-content p {
+    font-size: 12px;
+  }
+
+  .experience-offer {
+    margin-top: 55px;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 25px 5px;
+  }
+
+  .experience-offer h2 {
+    font-size: 24px;
+  }
+
+  .experience-offer p {
+    line-height: 1.5;
+  }
+}

@@ -5,6 +5,7 @@ import "./accomo.css";
 // Ganti path gambar sesuai file aktual (taruh di public/images/rooms/ atau import dari src/assets)
 const ROOM_LEVELS = [
   { id: "standard", name: "Standard", image: "/images/rooms/standard.jpg" },
+  { id: "deluxe", name: "Deluxe", image: "/images/rooms/deluxe.jpg" },
   { id: "premium", name: "Premium", image: "/images/rooms/premium.jpg" },
   { id: "executive", name: "Executive", image: "/images/rooms/executive.jpg" },
   { id: "presidential", name: "Presidential", image: "/images/rooms/presidential.jpg" },
