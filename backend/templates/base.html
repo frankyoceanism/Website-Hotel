@@ -160,14 +160,16 @@
 
 <body>
 
-    <nav>
+        <nav>
         <h2>HOTEL</h2>
         <div>
             {% if session.id_user %}
-                <a href="/hotel">Kamar</a>
-                <a href="/riwayat">Riwayat</a>
                 {% if session.role == 'admin' %}
                     <a href="/admin">Dashboard</a>
+                    <a href="/riwayat">Riwayat</a>
+                {% else %}
+                    <a href="/hotel">Kamar</a>
+                    <a href="/riwayat">Riwayat</a>
                 {% endif %}
                 <a href="/logout">Logout ({{ session.nama }})</a>
             {% else %}
@@ -193,3 +195,4 @@
 
 </body>
 </html>
+a
