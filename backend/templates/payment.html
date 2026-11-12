@@ -18,11 +18,17 @@
     <p class="center">Total Pembayaran</p>
     <p class="total center" style="font-size:26px;">{{ booking.total_harga|rupiah }}</p>
 
-    <form method="POST" onsubmit="this.querySelector('.btn').disabled = true;">
+        <form method="POST" onsubmit="this.querySelector('.btn').disabled = true;">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
         <button type="submit" class="btn full">Bayar Sekarang</button>
     </form>
 
-    <p class="center"><a class="link" href="/riwayat">Batal</a></p>
+    <form method="POST" action="/batal/{{ booking.id_booking }}"
+        onsubmit="return confirm('Batalkan booking ini?');">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <button type="submit" class="btn danger full">Batalkan Booking</button>
+    </form>
+
+<p class="center"><a class="link" href="/riwayat">Bayar nanti</a></p>
 </div>
 {% endblock %}

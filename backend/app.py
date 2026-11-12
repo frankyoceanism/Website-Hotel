@@ -787,6 +787,8 @@ def booking(id_room):
     for a in addons_dipilih:
         total_harga += a["harga"]
 
+    id_booking = None
+
     with transaksi() as cur:
         # Kunci baris kamar agar dua booking bersamaan tidak bentrok
         cur.execute("SELECT id_room FROM rooms WHERE id_room = %s" + LOCK,
@@ -823,7 +825,7 @@ def booking(id_room):
         return redirect(balik)
 
     flash("Booking berhasil dibuat. Silakan lakukan pembayaran.", "ok")
-    return redirect("/riwayat")
+    return redirect(f"/bayar/{id_booking}")
 
 
 @app.route("/riwayat")
