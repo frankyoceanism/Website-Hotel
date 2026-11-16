@@ -102,7 +102,7 @@ function PasswordField({ name, value, onChange, autoComplete }) {
 function AuthDialog({ onClose, initialView }) {
   const [view, setView] = useState(initialView);
   const [signIn, setSignIn] = useState({ username: "", password: "" });
-  const [signUp, setSignUp] = useState({ fullName: "", username: "", email: "", password: "" });
+  const [signUp, setSignUp] = useState({ username: "", email: "", password: "" });
 
   // Tutup dengan Esc dan kunci scroll halaman saat modal terbuka
   useEffect(() => {
@@ -208,33 +208,24 @@ function AuthDialog({ onClose, initialView }) {
               </h2>
 
               <form onSubmit={handleSignUp} className="auth__form auth__form--grow">
-                <div className="auth__row">
-                  <Field
-                    label="Full Name"
-                    name="signup-fullname"
-                    value={signUp.fullName}
-                    onChange={(e) => setSignUp({ ...signUp, fullName: e.target.value })}
-                    placeholder="Enter your full name"
-                    autoComplete="name"
-                  />
                   <Field
                     label="Username"
                     name="signup-username"
                     value={signUp.username}
                     onChange={(e) => setSignUp({ ...signUp, username: e.target.value })}
-                    placeholder="Choose a username"
+                    placeholder="Create a username"
                     autoComplete="username"
                   />
-                </div>
-                <Field
-                  label="Email"
-                  name="signup-email"
-                  type="email"
-                  value={signUp.email}
-                  onChange={(e) => setSignUp({ ...signUp, email: e.target.value })}
-                  placeholder="Enter your email"
-                  autoComplete="email"
-                />
+                  <Field
+                    label="Email"
+                    name="signup-email"
+                    value={signUp.email}
+                    onChange={(e) => setSignUp({ ...signUp, email: e.target.value })}
+                    placeholder="Choose an Email"
+                    type="email"
+                    autoComplete="email"
+                  />
+                  
                 <PasswordField
                   name="signup-password"
                   value={signUp.password}

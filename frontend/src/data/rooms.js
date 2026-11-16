@@ -1,4 +1,3 @@
-
 const rooms = [
   {
     id: 1,

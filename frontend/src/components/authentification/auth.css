@@ -80,17 +80,6 @@
   flex-direction: column;
   gap: 22px;
 }
-
-.auth__form--grow {
-  flex: 1;
-}
-
-.auth__row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-}
-
 .auth__field {
   display: flex;
   flex-direction: column;

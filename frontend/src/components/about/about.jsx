@@ -7,7 +7,7 @@ function About() {
         
         {/* UBAH JUDUL DI SINI */}
         <h2 className="about-title">
-          A TRANQUIL RETREAT IN THE VIBRANT CITY CENTER
+          A TRANQUIL RETREAT IN THE MIDDLE OF SURABAYA
         </h2>
 
         {/* UBAH DESKRIPSI (LOKASI & PENGALAMAN) DI SINI */}

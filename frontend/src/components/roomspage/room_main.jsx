@@ -1,19 +1,15 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import rooms from "../../data/rooms";
-import RoomDetailsModal from "../rooms page/room_detail";
+import RoomDetailsModal from "./room_detail";
 import "./room_main.css";
 
 function RoomShowcase() {
   const [selectedRoom, setSelectedRoom] = useState(null);
-  const navigate = useNavigate();
-
-  const handleBooking = (room) => {
-    navigate(`/bookings?room=${encodeURIComponent(room.name)}`);
-  };
+  const navigate = useNavigate()
 
   const handleReserve = () => {
-    navigate("/bookings");
+    navigate("/Bookings");
   };
 
   return (
@@ -108,7 +104,6 @@ function RoomShowcase() {
         <RoomDetailsModal
           room={selectedRoom}
           onClose={() => setSelectedRoom(null)}
-          onBook={() => handleBooking(selectedRoom)}
         />
       )}
 
