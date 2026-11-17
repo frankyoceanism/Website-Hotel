@@ -20,7 +20,7 @@
     <table>
         <tr>
             <th>ID</th><th>Nomor</th><th>Tipe</th>
-            <th>Harga per Malam</th><th>Status</th><th>Aksi</th>
+            <th>Harga per Malam</th><th>Kapasitas</th><th>Status</th><th>Aksi</th>
         </tr>
         {% for room in rooms %}
         <tr>
@@ -28,6 +28,7 @@
             <td>{{ room.nomor_kamar }}</td>
             <td>{{ room.tipe_kamar }}</td>
             <td>{{ room.harga_per_malam|rupiah }}</td>
+            <td>{{ room.kapasitas }} tamu</td>
             <td>
                 <span class="badge {{ 'ok' if room.status == 'Tersedia' else 'bad' }}">
                     {{ room.status }}
@@ -48,7 +49,7 @@
             </td>
         </tr>
         {% else %}
-        <tr><td colspan="6">Belum ada data kamar.</td></tr>
+        <tr><td colspan="7">Belum ada data kamar.</td></tr>
         {% endfor %}
     </table>
     </div>
@@ -62,6 +63,8 @@
             <input type="text" name="tipe_kamar" maxlength="50" required></div>
         <div><label>Harga per Malam</label>
             <input type="number" name="harga_per_malam" min="1" step="1000" required></div>
+        <div><label>Kapasitas (tamu)</label>
+            <input type="number" name="kapasitas" min="1" max="20" value="2" required></div>
         <div><button class="btn" type="submit">Tambah</button></div>
     </form>
 </div>
