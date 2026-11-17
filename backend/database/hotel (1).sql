@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 12, 2026 at 01:06 PM
+-- Generation Time: Nov 17, 2026 at 11:46 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -30,18 +30,20 @@ SET time_zone = "+00:00";
 CREATE TABLE `addons` (
   `id_addon` int(11) NOT NULL,
   `nama_addon` varchar(100) NOT NULL,
-  `harga` int(11) NOT NULL
+  `harga` int(11) NOT NULL,
+  `deskripsi` text DEFAULT NULL,
+  `gambar` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `addons`
 --
 
-INSERT INTO `addons` (`id_addon`, `nama_addon`, `harga`) VALUES
-(1, 'Breakfast', 50000),
-(2, 'Extra Bed', 100000),
-(3, 'Airport Pickup', 150000),
-(4, 'Laundry', 30000);
+INSERT INTO `addons` (`id_addon`, `nama_addon`, `harga`, `deskripsi`, `gambar`) VALUES
+(1, 'Breakfast', 50000, NULL, NULL),
+(2, 'Extra Bed', 100000, NULL, NULL),
+(3, 'Airport Pickup', 150000, NULL, NULL),
+(4, 'Laundry', 30000, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -56,27 +58,32 @@ CREATE TABLE `bookings` (
   `tanggal_checkin` date NOT NULL,
   `tanggal_checkout` date NOT NULL,
   `total_harga` int(11) NOT NULL,
-  `status` varchar(20) NOT NULL DEFAULT 'Menunggu'
+  `status` varchar(20) NOT NULL DEFAULT 'Menunggu',
+  `jumlah_tamu` int(11) NOT NULL DEFAULT 1,
+  `bank` varchar(20) DEFAULT NULL,
+  `va_number` varchar(25) DEFAULT NULL,
+  `expires_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `bookings`
 --
 
-INSERT INTO `bookings` (`id_booking`, `id_user`, `id_room`, `tanggal_checkin`, `tanggal_checkout`, `total_harga`, `status`) VALUES
-(23, 101, 7, '2026-11-27', '2026-12-01', 3800000, 'batal'),
-(25, 104, 7, '2026-11-06', '2026-11-08', 2100000, 'batal'),
-(26, 105, 7, '2026-11-11', '2026-11-18', 6980000, 'batal'),
-(27, 105, 5, '2026-11-12', '2026-12-26', 15550000, 'batal'),
-(28, 101, 7, '2026-11-25', '2026-11-26', 1000000, 'batal'),
-(29, 101, 6, '2026-11-11', '2026-11-12', 880000, 'batal'),
-(30, 104, 5, '2026-11-14', '2026-11-18', 1550000, 'batal'),
-(31, 104, 5, '2026-11-13', '2026-11-18', 1750000, 'batal'),
-(32, 104, 5, '2026-11-21', '2026-11-27', 2100000, 'batal'),
-(33, 104, 5, '2026-11-20', '2026-11-27', 2450000, 'batal'),
-(34, 104, 5, '2026-11-12', '2026-11-21', 3150000, 'batal'),
-(35, 104, 5, '2026-11-12', '2026-11-21', 3150000, 'batal'),
-(36, 104, 5, '2026-11-13', '2026-11-28', 5400000, 'lunas');
+INSERT INTO `bookings` (`id_booking`, `id_user`, `id_room`, `tanggal_checkin`, `tanggal_checkout`, `total_harga`, `status`, `jumlah_tamu`, `bank`, `va_number`, `expires_at`) VALUES
+(23, 101, 7, '2026-11-27', '2026-12-01', 3800000, 'batal', 1, NULL, NULL, NULL),
+(25, 104, 7, '2026-11-06', '2026-11-08', 2100000, 'batal', 1, NULL, NULL, NULL),
+(26, 105, 7, '2026-11-11', '2026-11-18', 6980000, 'batal', 1, NULL, NULL, NULL),
+(27, 105, 5, '2026-11-12', '2026-12-26', 15550000, 'batal', 1, NULL, NULL, NULL),
+(28, 101, 7, '2026-11-25', '2026-11-26', 1000000, 'batal', 1, NULL, NULL, NULL),
+(29, 101, 6, '2026-11-11', '2026-11-12', 880000, 'batal', 1, NULL, NULL, NULL),
+(30, 104, 5, '2026-11-14', '2026-11-18', 1550000, 'batal', 1, NULL, NULL, NULL),
+(31, 104, 5, '2026-11-13', '2026-11-18', 1750000, 'batal', 1, NULL, NULL, NULL),
+(32, 104, 5, '2026-11-21', '2026-11-27', 2100000, 'batal', 1, NULL, NULL, NULL),
+(33, 104, 5, '2026-11-20', '2026-11-27', 2450000, 'batal', 1, NULL, NULL, NULL),
+(34, 104, 5, '2026-11-12', '2026-11-21', 3150000, 'batal', 1, NULL, NULL, NULL),
+(35, 104, 5, '2026-11-12', '2026-11-21', 3150000, 'batal', 1, NULL, NULL, NULL),
+(36, 104, 5, '2026-11-13', '2026-11-28', 5400000, 'batal', 1, NULL, NULL, NULL),
+(37, 104, 6, '2026-11-26', '2026-12-05', 4950000, 'batal', 1, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -120,17 +127,21 @@ CREATE TABLE `rooms` (
   `nomor_kamar` varchar(10) NOT NULL,
   `tipe_kamar` varchar(50) NOT NULL,
   `harga_per_malam` int(11) NOT NULL,
-  `status` varchar(20) NOT NULL DEFAULT 'Tersedia'
+  `status` varchar(20) NOT NULL DEFAULT 'Tersedia',
+  `kapasitas` int(11) NOT NULL DEFAULT 2
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `rooms`
 --
 
-INSERT INTO `rooms` (`id_room`, `nomor_kamar`, `tipe_kamar`, `harga_per_malam`, `status`) VALUES
-(5, '102', 'Standard', 350000, 'Tersedia'),
-(6, '201', 'Deluxe', 550000, 'Tersedia'),
-(7, '301', 'Suite', 950000, 'Tersedia');
+INSERT INTO `rooms` (`id_room`, `nomor_kamar`, `tipe_kamar`, `harga_per_malam`, `status`, `kapasitas`) VALUES
+(5, '102', 'Standard', 350000, 'Tersedia', 2),
+(6, '201', 'Deluxe', 550000, 'Tersedia', 2),
+(7, '301', 'Suite', 950000, 'Tersedia', 4),
+(8, '142', 'Premium', 1600000, 'Tersedia', 2),
+(9, '152', 'Exclusive', 2200000, 'Tersedia', 3),
+(10, '223', 'Presidential', 3500000, 'Tersedia', 4);
 
 -- --------------------------------------------------------
 
@@ -143,17 +154,18 @@ CREATE TABLE `users` (
   `nama` varchar(100) NOT NULL,
   `username` varchar(50) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `role` enum('admin','customer') DEFAULT 'customer'
+  `role` enum('admin','customer') DEFAULT 'customer',
+  `email` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id_user`, `nama`, `username`, `password`, `role`) VALUES
-(101, 'admin', 'admin123', 'scrypt:32768:8:1$BPVeFcIJTWfIYuXL$ebe061bb81b9813d3a906bc7f0e44c6d3a9252b3ca202495e8a3b5e1dbb35eca74b0af59e393339e3e833162f7bb9c749ed2db9f4426f7cd60b2a8bf52883f5a', 'admin'),
-(104, 'npc', 'pembeli', 'scrypt:32768:8:1$2DnM1CkaX0OGneBJ$fa1deae633478cc48b14d3e7f7adb923c6fd2e78c4ca42f0c35f907a5992ee8a1f9bbeee8af5fdb6c57a7dc5b3f1fb636613c5e0d09e918f07f497bab923681d', 'customer'),
-(105, 'samlekom', 'samlekom', 'scrypt:32768:8:1$XuujSsDpUPW34IKA$eeba23c71272455bd2b579c7e9d693163baca57ceef2d2258572326f751e5d913e5f6840cc6eb339b4e20584b274606d93205120375dab3085e6df426b215ed2', 'customer');
+INSERT INTO `users` (`id_user`, `nama`, `username`, `password`, `role`, `email`) VALUES
+(101, 'admin', 'admin123', 'scrypt:32768:8:1$BPVeFcIJTWfIYuXL$ebe061bb81b9813d3a906bc7f0e44c6d3a9252b3ca202495e8a3b5e1dbb35eca74b0af59e393339e3e833162f7bb9c749ed2db9f4426f7cd60b2a8bf52883f5a', 'admin', NULL),
+(104, 'npc', 'pembeli', 'scrypt:32768:8:1$2DnM1CkaX0OGneBJ$fa1deae633478cc48b14d3e7f7adb923c6fd2e78c4ca42f0c35f907a5992ee8a1f9bbeee8af5fdb6c57a7dc5b3f1fb636613c5e0d09e918f07f497bab923681d', 'customer', NULL),
+(105, 'samlekom', 'samlekom', 'scrypt:32768:8:1$XuujSsDpUPW34IKA$eeba23c71272455bd2b579c7e9d693163baca57ceef2d2258572326f751e5d913e5f6840cc6eb339b4e20584b274606d93205120375dab3085e6df426b215ed2', 'customer', NULL);
 
 --
 -- Indexes for dumped tables
@@ -191,7 +203,8 @@ ALTER TABLE `rooms`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id_user`),
-  ADD UNIQUE KEY `username` (`username`);
+  ADD UNIQUE KEY `username` (`username`),
+  ADD UNIQUE KEY `email` (`email`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -207,13 +220,13 @@ ALTER TABLE `addons`
 -- AUTO_INCREMENT for table `bookings`
 --
 ALTER TABLE `bookings`
-  MODIFY `id_booking` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id_booking` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
-  MODIFY `id_room` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_room` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `users`
