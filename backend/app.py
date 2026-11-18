@@ -506,12 +506,11 @@ def jaga_api():
 
 @app.before_request
 def kedaluwarsakan_booking():
-    """Booking 'Menunggu' yang lewat batas bayar otomatis dibatalkan (kamar kosong lagi)."""
-    if request.endpoint in (None, "static") or request.method == "OPTIONS":
-        return
-    jalankan("UPDATE bookings SET status = 'batal' "
-            "WHERE LOWER(status) = 'menunggu' "
-            "AND expires_at IS NOT NULL AND expires_at < %s", (sekarang_utc(),))
+    """
+    Fitur pembatalan otomatis sementara dinonaktifkan.
+    Akan diaktifkan kembali setelah kolom expires_at tersedia.
+    """
+    return
 
 
 @app.after_request
