@@ -353,3 +353,23 @@
     transition: none;
   }
 }
+
+/* ---------- Pesan dari API ---------- */
+.auth__message {
+  margin: -12px 0 18px;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.auth__message--error {
+  color: #b42318;
+}
+
+.auth__message--success {
+  color: #18794e;
+}
+
+.auth__submit:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
