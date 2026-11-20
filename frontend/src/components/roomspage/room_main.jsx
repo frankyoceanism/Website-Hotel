@@ -1,15 +1,25 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import { useAuth } from "../../data/authcontext.jsx";
 import rooms from "../../data/rooms";
 import RoomDetailsModal from "./room_detail";
 import "./room_main.css";
 
 function RoomShowcase() {
   const [selectedRoom, setSelectedRoom] = useState(null);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const { user, loading, openAuth } = useAuth();
 
   const handleReserve = () => {
-    navigate("/Bookings");
+    if (loading) return; // status login masih dicek
+
+    if (!user) {
+      openAuth("/bookings"); // login dulu, setelah berhasil langsung ke booking
+    } else if (user.role === "admin") {
+      navigate("/admin");
+    } else {
+      navigate("/bookings");
+    }
   };
 
   return (

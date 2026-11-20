@@ -29,7 +29,7 @@ const rooms = [
     description:
       "An elevated accommodation offering additional space, refined interiors, and a peaceful atmosphere.",
     size: "35 m²",
-    capacity: 2,
+    capacity: 3,
     bedType: "King Bed",
     images: [
       "/images/rooms/deluxe-1.jpg",
@@ -52,7 +52,7 @@ const rooms = [
     description:
       "A spacious retreat combining premium comfort, elegant details, and carefully curated room amenities.",
     size: "42 m²",
-    capacity: 2,
+    capacity: 4,
     bedType: "King Bed",
     images: [
       "/images/rooms/premium-1.jpg",
@@ -76,7 +76,7 @@ const rooms = [
     description:
       "A distinctive suite experience featuring generous living space, sophisticated interiors, and exclusive comforts.",
     size: "55 m²",
-    capacity: 3,
+    capacity: 5,
     bedType: "King Bed",
     images: [
       "/images/rooms/exclusive-1.jpg",
@@ -101,7 +101,7 @@ const rooms = [
     description:
       "Our most distinguished accommodation, offering exceptional space, privacy, and an elevated residential experience.",
     size: "85 m²",
-    capacity: 4,
+    capacity: 6,
     bedType: "King Bed",
     images: [
       "/images/rooms/presidential-1.jpg",

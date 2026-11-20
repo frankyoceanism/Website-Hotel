@@ -1,37 +1,40 @@
 const experiences = [
   {
     id: 'spa',
-    tab: 'Spa',
-    title: 'Spa',
+    tab: 'Spa & Wellness',
+    title: 'Spa & Wellness',
     image: '/images/spa.jpg',
     price: 200000,
     description:
-      'Nurture your body and soul with our relaxing yoga retreats. Experience serenity and wellness in our luxurious sanctuary.',
+      'Unwind with our selection of relaxing treatments, designed to restore balance and offer a peaceful retreat from the pace of city life.',
   },
   {
-    id: 'fitness',
-    tab: 'Fitness',
-    title: 'Fitness',
-    image: '/images/fitness.jpg',
+    id: 'cultural',
+    tab: 'Cultural Experience',
+    title: 'Cultural Experience',
+    image: '/images/cultural.jpg',
     price: 120000,
-    description: 'Deskripsi fitness di sini.',
+    description:
+      'Discover Surabaya’s local heritage through traditional crafts, historical landmarks, and curated experiences led by local guides.',
   },
   {
-    id: 'meditation',
-    tab: 'Meditation',
-    title: 'Meditation',
-    image: '/images/meditation.jpg',
+    id: 'airport',
+    tab: 'Airport Transfer',
+    title: 'Airport Transfer',
+    image: '/images/airport.jpg',
     price: 250000,
-    description: 'Deskripsi meditation di sini.',
+    description:
+      'Enjoy a convenient journey between the hotel and Juanda International Airport with our private pickup and drop-off service.',
   },
   {
-    id: 'swimming',
-    tab: 'Swimming',
-    title: 'Swimming',
-    image: '/images/swimming.jpg',
+    id: 'culinary',
+    tab: 'Culinary Journey',
+    title: 'Culinary Journey',
+    image: '/images/culinary.jpg',
     price: 150000,
-    description: 'Deskripsi swimming di sini.',
+    description:
+      'Explore Surabaya’s culinary heritage through traditional dishes and carefully selected local food destinations.',
   },
 ]
 
-export default experiences
+export default experiences  

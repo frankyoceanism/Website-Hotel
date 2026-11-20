@@ -78,6 +78,87 @@
   border-color: #a98b73;
 }
 
+/* Profil setelah login */
+.nav-profile {
+  position: relative;
+}
+
+.nav-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+  background: transparent;
+  color: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.nav-avatar svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+
+.navbar-solid .nav-avatar {
+  background-color: #a98b73;
+  border-color: #a98b73;
+  color: white;
+}
+
+.navbar-transparent .nav-avatar:hover {
+  background-color: #a98b73;
+  border-color: #a98b73;
+}
+
+.nav-menu {
+  position: absolute;
+  top: calc(100% + 14px);
+  right: 0;
+  min-width: 190px;
+  padding: 6px 0;
+  background: white;
+  color: #333;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  z-index: 1100;
+}
+
+.nav-menu__user {
+  padding: 12px 20px;
+  margin-bottom: 6px;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+  font-weight: 600;
+  color: #a98b73;
+}
+
+.nav-menu a,
+.nav-menu button {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 20px;
+  border: 0;
+  background: none;
+  text-align: left;
+  font: inherit;
+  font-size: 15px;
+  color: #333;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.nav-menu a:hover,
+.nav-menu button:hover {
+  background-color: #f5efe9;
+  color: #a98b73;
+}
+
 
 /* Booking */
 .navbar-booking {
@@ -105,4 +186,213 @@
   justify-content: space-between;
   background-color: white;
   color: #333;
+}
+
+
+/* ==============================
+   NAVBAR ANIMATIONS
+================================ */
+
+/* Animasi masuk navbar */
+.navbar-container {
+  animation: navbarEnter 0.65s ease both;
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+}
+
+@keyframes navbarEnter {
+  from {
+    opacity: 0;
+    transform: translateY(-15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Efek blur navbar */
+.navbar-solid,
+.navbar-history,
+.navbar-admin {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* ==============================
+   NAVIGATION LINKS
+================================ */
+
+.nav-actions a {
+  position: relative;
+  transition:
+    color 0.3s ease,
+    opacity 0.3s ease;
+}
+
+/* Underline animation */
+.nav-actions a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 100%;
+  height: 1px;
+  background-color: #a98b73;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease;
+}
+
+.nav-actions a:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* ==============================
+   BUTTON ANIMATION
+================================ */
+
+.btn-text {
+  position: relative;
+  overflow: hidden;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.btn-text:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(169, 139, 115, 0.2);
+}
+
+.btn-text:active {
+  transform: translateY(0) scale(0.97);
+}
+
+/* ==============================
+   PROFILE AVATAR
+================================ */
+
+.nav-avatar {
+  transition:
+    transform 0.3s ease,
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+.nav-avatar:hover {
+  transform: scale(1.08);
+}
+
+.nav-avatar:active {
+  transform: scale(0.94);
+}
+
+/* ==============================
+   PROFILE DROPDOWN
+================================ */
+
+.nav-menu {
+  transform-origin: top right;
+  animation: dropdownEnter 0.25s ease both;
+}
+
+@keyframes dropdownEnter {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Dropdown item hover */
+.nav-menu a,
+.nav-menu button {
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    padding-left 0.2s ease;
+}
+
+.nav-menu a:hover,
+.nav-menu button:hover {
+  padding-left: 25px;
+}
+
+/* ==============================
+   ACCESSIBILITY
+================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .navbar-container,
+  .nav-actions a,
+  .nav-actions a::after,
+  .btn-text,
+  .nav-avatar,
+  .nav-menu,
+  .nav-menu a,
+  .nav-menu button {
+    animation: none;
+    transition: none;
+  }
+}
+
+
+/* ==============================
+   RESPONSIVE NAVBAR
+================================ */
+
+@media (max-width: 768px) {
+  .navbar-container {
+    padding: 16px 5%;
+  }
+
+  /* Sembunyikan navigasi utama */
+  .nav-actions a {
+    display: none;
+  }
+
+  .nav-actions {
+    gap: 12px;
+  }
+
+  .navbar-brand {
+    font-size: 20px;
+  }
+
+  .btn-text {
+    padding: 9px 18px;
+    font-size: 13px;
+  }
+
+  .nav-avatar {
+    width: 36px;
+    height: 36px;
+  }
+
+  .nav-menu {
+    min-width: 180px;
+  }
+}
+
+/* Mobile kecil */
+@media (max-width: 400px) {
+  .navbar-container {
+    padding: 14px 4%;
+  }
+
+  .navbar-brand {
+    font-size: 17px;
+  }
+
+  .btn-text {
+    padding: 8px 14px;
+    font-size: 12px;
+  }
 }
