@@ -22,10 +22,14 @@
 
         {% for addon in addons %}
             <div class="addon">
+                {% set ada = addon.status == 'Tersedia' %}
                 <input type="checkbox" id="addon{{ addon.id_addon }}"
-                    name="addons" value="{{ addon.id_addon }}">
-                <label for="addon{{ addon.id_addon }}">
-                    <strong>{{ addon.nama_addon }}</strong><br>
+                    name="addons" value="{{ addon.id_addon }}"
+                    {% if not ada %}disabled{% endif %}>
+                <label for="addon{{ addon.id_addon }}"
+                    {% if not ada %}style="opacity:.5"{% endif %}>
+                    <strong>{{ addon.nama_addon }}</strong>
+                    <span class="badge {{ 'ok' if ada else 'bad' }}">{{ addon.status }}</span><br>
                     {{ addon.harga|rupiah }}
                 </label>
             </div>

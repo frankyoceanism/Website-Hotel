@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="card narrow">
+    <h2 class="center">Login</h2>
+    <p class="center muted">Masuk untuk memesan kamar.</p>
+
+    <form method="POST" action="/login">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username"
+            maxlength="50" autocomplete="username" required autofocus>
+
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password"
+            autocomplete="current-password" required>
+
+        <button type="submit" class="btn full">Masuk</button>
+    </form>
+
+    <p class="center muted" style="margin-top:20px;">
+        Belum punya akun? <a class="link" href="/register">Daftar</a>
+    </p>
+</div>
+{% endblock %}

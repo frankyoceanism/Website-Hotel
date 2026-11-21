@@ -14,7 +14,7 @@
 
 <!-- KAMAR -->
 <div class="card">
-    <h2>Master Data Kamar</h2>
+    <h2>Data Kamar</h2>
 
     <div class="table-wrap">
     <table>
@@ -71,7 +71,7 @@
 
 <!-- USER -->
 <div class="card">
-    <h2>Master Data User</h2>
+    <h2>Data User</h2>
     <div class="table-wrap">
     <table>
         <tr><th>ID User</th><th>Nama</th><th>Username</th><th>Role</th></tr>
@@ -91,7 +91,7 @@
 
 <!-- BOOKING -->
 <div class="card">
-    <h2>Master Data Booking</h2>
+    <h2>Data Booking</h2>
     <div class="table-wrap">
     <table>
         <tr>
@@ -126,18 +126,36 @@
 
 <!-- ADD-ON -->
 <div class="card">
-    <h2>Master Data Add-on</h2>
+    <h2>Data Add-on</h2>
     <div class="table-wrap">
     <table>
-        <tr><th>ID</th><th>Nama Add-on</th><th>Harga</th></tr>
+        <tr><th>ID</th><th>Nama Add-on</th><th>Harga</th><th>Status</th><th>Aksi</th></tr>
         {% for addon in addons %}
         <tr>
             <td>{{ addon.id_addon }}</td>
             <td>{{ addon.nama_addon }}</td>
             <td>{{ addon.harga|rupiah }}</td>
+            <td>
+                <span class="badge {{ 'ok' if addon.status == 'Tersedia' else 'bad' }}">
+                    {{ addon.status }}
+                </span>
+            </td>
+            <td>
+                <form class="inline" method="POST"
+                    action="/admin/addon/{{ addon.id_addon }}/status">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                    {% if addon.status == 'Tersedia' %}
+                        <input type="hidden" name="status" value="Tidak Tersedia">
+                        <button class="btn small danger" type="submit">Nonaktifkan</button>
+                    {% else %}
+                        <input type="hidden" name="status" value="Tersedia">
+                        <button class="btn small" type="submit">Aktifkan</button>
+                    {% endif %}
+                </form>
+            </td>
         </tr>
         {% else %}
-        <tr><td colspan="3">Belum ada data add-on.</td></tr>
+        <tr><td colspan="5">Belum ada data add-on.</td></tr>
         {% endfor %}
     </table>
     </div>

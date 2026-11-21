@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 17, 2026 at 11:46 AM
+-- Generation Time: Nov 21, 2026 at 07:35 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -31,19 +31,18 @@ CREATE TABLE `addons` (
   `id_addon` int(11) NOT NULL,
   `nama_addon` varchar(100) NOT NULL,
   `harga` int(11) NOT NULL,
-  `deskripsi` text DEFAULT NULL,
-  `gambar` varchar(255) DEFAULT NULL
+  `status` varchar(20) NOT NULL DEFAULT 'Tersedia'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `addons`
 --
 
-INSERT INTO `addons` (`id_addon`, `nama_addon`, `harga`, `deskripsi`, `gambar`) VALUES
-(1, 'Breakfast', 50000, NULL, NULL),
-(2, 'Extra Bed', 100000, NULL, NULL),
-(3, 'Airport Pickup', 150000, NULL, NULL),
-(4, 'Laundry', 30000, NULL, NULL);
+INSERT INTO `addons` (`id_addon`, `nama_addon`, `harga`, `status`) VALUES
+(1, 'Breakfast', 50000, 'Tersedia'),
+(2, 'Extra Bed', 100000, 'Tersedia'),
+(3, 'Airport Pickup', 150000, 'Tersedia'),
+(4, 'Laundry', 30000, 'Tersedia');
 
 -- --------------------------------------------------------
 
@@ -83,7 +82,10 @@ INSERT INTO `bookings` (`id_booking`, `id_user`, `id_room`, `tanggal_checkin`, `
 (34, 104, 5, '2026-11-12', '2026-11-21', 3150000, 'batal', 1, NULL, NULL, NULL),
 (35, 104, 5, '2026-11-12', '2026-11-21', 3150000, 'batal', 1, NULL, NULL, NULL),
 (36, 104, 5, '2026-11-13', '2026-11-28', 5400000, 'batal', 1, NULL, NULL, NULL),
-(37, 104, 6, '2026-11-26', '2026-12-05', 4950000, 'batal', 1, NULL, NULL, NULL);
+(37, 104, 6, '2026-11-26', '2026-12-05', 4950000, 'batal', 1, NULL, NULL, NULL),
+(38, 106, 8, '2026-11-18', '2026-11-27', 14500000, 'lunas', 1, NULL, NULL, NULL),
+(39, 106, 10, '2026-11-19', '2026-11-25', 21030000, 'lunas', 1, NULL, NULL, NULL),
+(40, 106, 5, '2026-11-21', '2026-11-23', 850000, 'lunas', 1, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -114,7 +116,10 @@ INSERT INTO `booking_addons` (`id_booking`, `id_addon`) VALUES
 (29, 3),
 (29, 4),
 (30, 3),
-(36, 3);
+(36, 3),
+(38, 2),
+(39, 4),
+(40, 3);
 
 -- --------------------------------------------------------
 
@@ -139,7 +144,7 @@ INSERT INTO `rooms` (`id_room`, `nomor_kamar`, `tipe_kamar`, `harga_per_malam`, 
 (5, '102', 'Standard', 350000, 'Tersedia', 2),
 (6, '201', 'Deluxe', 550000, 'Tersedia', 2),
 (7, '301', 'Suite', 950000, 'Tersedia', 4),
-(8, '142', 'Premium', 1600000, 'Tersedia', 2),
+(8, '142', 'Premium', 1600000, 'Tersedia', 3),
 (9, '152', 'Exclusive', 2200000, 'Tersedia', 3),
 (10, '223', 'Presidential', 3500000, 'Tersedia', 4);
 
@@ -165,7 +170,8 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id_user`, `nama`, `username`, `password`, `role`, `email`) VALUES
 (101, 'admin', 'admin123', 'scrypt:32768:8:1$BPVeFcIJTWfIYuXL$ebe061bb81b9813d3a906bc7f0e44c6d3a9252b3ca202495e8a3b5e1dbb35eca74b0af59e393339e3e833162f7bb9c749ed2db9f4426f7cd60b2a8bf52883f5a', 'admin', NULL),
 (104, 'npc', 'pembeli', 'scrypt:32768:8:1$2DnM1CkaX0OGneBJ$fa1deae633478cc48b14d3e7f7adb923c6fd2e78c4ca42f0c35f907a5992ee8a1f9bbeee8af5fdb6c57a7dc5b3f1fb636613c5e0d09e918f07f497bab923681d', 'customer', NULL),
-(105, 'samlekom', 'samlekom', 'scrypt:32768:8:1$XuujSsDpUPW34IKA$eeba23c71272455bd2b579c7e9d693163baca57ceef2d2258572326f751e5d913e5f6840cc6eb339b4e20584b274606d93205120375dab3085e6df426b215ed2', 'customer', NULL);
+(105, 'samlekom', 'samlekom', 'scrypt:32768:8:1$XuujSsDpUPW34IKA$eeba23c71272455bd2b579c7e9d693163baca57ceef2d2258572326f751e5d913e5f6840cc6eb339b4e20584b274606d93205120375dab3085e6df426b215ed2', 'customer', NULL),
+(106, 'asd', 'asd', 'scrypt:32768:8:1$eUudM2yt4PVCTrsE$40d1b8a7180e24e5cd7e2cd870442002b90536396d40253ba0fe0c7fb3cc422a9559fcfa7a1097f33a4de8c29986f12a597c16576dcd1dd7253cdca2794fc330', 'customer', NULL);
 
 --
 -- Indexes for dumped tables
@@ -220,7 +226,7 @@ ALTER TABLE `addons`
 -- AUTO_INCREMENT for table `bookings`
 --
 ALTER TABLE `bookings`
-  MODIFY `id_booking` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `id_booking` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT for table `rooms`
@@ -232,7 +238,7 @@ ALTER TABLE `rooms`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=106;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=107;
 
 --
 -- Constraints for dumped tables
