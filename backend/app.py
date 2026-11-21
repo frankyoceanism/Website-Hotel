@@ -5,7 +5,7 @@ from datetime import date, datetime, timedelta
 
 import mysql.connector
 from flask import (Flask, abort, flash, g, jsonify, redirect,
-                    render_template, request, session)
+                   render_template, request, session)
 from werkzeug.security import check_password_hash, generate_password_hash
 
 app = Flask(__name__)
@@ -79,7 +79,7 @@ def rupiah(nilai):
 
 def halaman_error(pesan, kode=400):
     return render_template("error.html", pesan=pesan, kode=kode,
-                        petunjuk=None, detail=None), kode
+                           petunjuk=None, detail=None), kode
 
 
 @app.context_processor
@@ -153,7 +153,7 @@ def login():
 
     session.clear()
     session["id_user"] = user["id_user"]
-    session["nama"] = user["nama"]
+    session["username"] = user["username"]
     session["role"] = user["role"]
 
     if user["role"] == "admin":
@@ -172,12 +172,16 @@ def register():
     if request.method == "GET":
         return render_template("register.html")
 
-    nama = request.form.get("nama", "").strip()
     username = request.form.get("username", "").strip()
+    email = request.form.get("email", "").strip().lower()
     password = request.form.get("password", "")
 
-    if not nama or not username or not password:
+    if not username or not email or not password:
         flash("Semua field wajib diisi.", "error")
+        return redirect("/register")
+
+    if not re.fullmatch(r"[^@\s]+@[^@\s]+\.[^@\s]+", email):
+        flash("Format email tidak valid.", "error")
         return redirect("/register")
 
     if len(password) < 6:
@@ -189,9 +193,14 @@ def register():
         flash("Username sudah dipakai.", "error")
         return redirect("/register")
 
-    jalankan("INSERT INTO users (nama, username, password, role) "
-            "VALUES (%s, %s, %s, 'customer')",
-            (nama, username, generate_password_hash(password)))
+    ada = ambil_satu("SELECT 1 AS x FROM users WHERE email = %s", (email,))
+    if ada:
+        flash("Email sudah terdaftar.", "error")
+        return redirect("/register")
+
+    jalankan("INSERT INTO users (username, email, password, role) "
+             "VALUES (%s, %s, %s, 'customer')",
+             (username, email, generate_password_hash(password)))
     flash("Pendaftaran berhasil. Silakan login.", "ok")
     return redirect("/login")
 
@@ -212,7 +221,7 @@ def hotel():
     if session["role"] == "admin":
         return redirect("/admin")
 
-    rooms = ambil_semua("SELECT * FROM rooms ORDER BY nomor_kamar")
+    rooms = ambil_semua("SELECT * FROM rooms ORDER BY id_room")
     return render_template("rooms.html", rooms=rooms)
 
 
@@ -285,7 +294,7 @@ def booking(id_room):
         (session["id_user"], id_room, tgl_masuk, tgl_keluar, total))
     for a in addon_dipilih:
         jalankan("INSERT INTO booking_addons (id_booking, id_addon) "
-            "VALUES (%s, %s)", (id_booking, a["id_addon"]))
+                 "VALUES (%s, %s)", (id_booking, a["id_addon"]))
 
     flash("Booking berhasil dibuat. Silakan lakukan pembayaran.", "ok")
     return redirect(f"/bayar/{id_booking}")
@@ -303,7 +312,7 @@ def kamar_bentrok(id_room, tgl_masuk, tgl_keluar):
 @harus_login
 def riwayat():
     sql = """
-        SELECT bookings.*, users.nama, rooms.nomor_kamar, rooms.tipe_kamar
+        SELECT bookings.*, users.username, rooms.tipe_kamar
         FROM bookings
         JOIN users ON bookings.id_user = users.id_user
         JOIN rooms ON bookings.id_room = rooms.id_room
@@ -313,7 +322,7 @@ def riwayat():
     else:
         data = ambil_semua(
             sql + " WHERE bookings.id_user = %s "
-                "ORDER BY bookings.id_booking DESC",
+                  "ORDER BY bookings.id_booking DESC",
             (session["id_user"],))
     return render_template("bookings.html", bookings=data)
 
@@ -324,7 +333,7 @@ def riwayat():
 @harus_login
 def bayar(id_booking):
     data = ambil_satu("""
-        SELECT bookings.*, users.nama, rooms.nomor_kamar, rooms.tipe_kamar
+        SELECT bookings.*, users.username, rooms.tipe_kamar
         FROM bookings
         JOIN users ON bookings.id_user = users.id_user
         JOIN rooms ON bookings.id_room = rooms.id_room
@@ -346,7 +355,7 @@ def bayar(id_booking):
 
     if request.method == "POST":
         jalankan("UPDATE bookings SET status = 'lunas' WHERE id_booking = %s",
-                (id_booking,))
+                 (id_booking,))
         flash("Pembayaran berhasil.", "ok")
         return redirect("/riwayat")
 
@@ -357,7 +366,7 @@ def bayar(id_booking):
 @harus_login
 def batal(id_booking):
     data = ambil_satu("SELECT id_user, status FROM bookings "
-                    "WHERE id_booking = %s", (id_booking,))
+                      "WHERE id_booking = %s", (id_booking,))
     if data is None:
         return halaman_error("Booking tidak ditemukan.", 404)
 
@@ -372,7 +381,7 @@ def batal(id_booking):
         flash("Booking yang sudah lunas hanya bisa dibatalkan oleh admin.", "error")
     else:
         jalankan("UPDATE bookings SET status = 'batal' WHERE id_booking = %s",
-                (id_booking,))
+                 (id_booking,))
         flash("Booking dibatalkan.", "ok")
 
     return redirect("/riwayat")
@@ -385,10 +394,10 @@ def batal(id_booking):
 def admin():
     return render_template(
         "admin.html",
-        rooms=ambil_semua("SELECT * FROM rooms ORDER BY nomor_kamar"),
-        users=ambil_semua("SELECT id_user, nama, username, role FROM users"),
+        rooms=ambil_semua("SELECT * FROM rooms ORDER BY id_room"),
+        users=ambil_semua("SELECT id_user, username, email, role FROM users"),
         bookings=ambil_semua("""
-            SELECT bookings.*, users.nama, rooms.nomor_kamar
+            SELECT bookings.*, users.username, rooms.tipe_kamar
             FROM bookings
             JOIN users ON bookings.id_user = users.id_user
             JOIN rooms ON bookings.id_room = rooms.id_room
@@ -401,24 +410,18 @@ def admin():
 @app.route("/admin/kamar/tambah", methods=["POST"])
 @harus_admin
 def tambah_kamar():
-    nomor = request.form.get("nomor_kamar", "").strip()
     tipe = request.form.get("tipe_kamar", "").strip()
     harga = request.form.get("harga_per_malam", "").strip()
     kapasitas = request.form.get("kapasitas", "").strip()
 
-    if (not nomor or not tipe or not harga.isdigit() or int(harga) <= 0
+    if (not tipe or not harga.isdigit() or int(harga) <= 0
             or not kapasitas.isdigit() or int(kapasitas) < 1):
         flash("Data kamar tidak valid.", "error")
         return redirect("/admin")
 
-    ada = ambil_satu("SELECT 1 AS x FROM rooms WHERE nomor_kamar = %s", (nomor,))
-    if ada:
-        flash("Nomor kamar sudah ada.", "error")
-        return redirect("/admin")
-
-    jalankan("INSERT INTO rooms (nomor_kamar, tipe_kamar, harga_per_malam, "
-            "kapasitas, status) VALUES (%s, %s, %s, %s, 'Tersedia')",
-            (nomor, tipe, harga, kapasitas))
+    jalankan("INSERT INTO rooms (tipe_kamar, harga_per_malam, "
+             "kapasitas, status) VALUES (%s, %s, %s, 'Tersedia')",
+             (tipe, harga, kapasitas))
     flash("Kamar ditambahkan.", "ok")
     return redirect("/admin")
 
@@ -435,6 +438,53 @@ def status_kamar(id_room):
     return redirect("/admin")
 
 
+@app.route("/admin/kamar/<int:id_room>/hapus", methods=["POST"])
+@harus_admin
+def hapus_kamar(id_room):
+    # kamar yang sudah pernah dibooking tidak boleh dihapus (riwayatnya hilang)
+    pakai = ambil_satu("SELECT COUNT(*) AS n FROM bookings WHERE id_room = %s",
+                       (id_room,))
+    if pakai["n"] > 0:
+        flash("Kamar ini punya riwayat booking. Nonaktifkan saja.", "error")
+        return redirect("/admin")
+
+    jalankan("DELETE FROM rooms WHERE id_room = %s", (id_room,))
+    flash("Kamar dihapus.", "ok")
+    return redirect("/admin")
+
+
+@app.route("/admin/user/<int:id_user>/hapus", methods=["POST"])
+@harus_admin
+def hapus_user(id_user):
+    if id_user == session["id_user"]:
+        flash("Kamu tidak bisa menghapus akunmu sendiri.", "error")
+        return redirect("/admin")
+
+    pakai = ambil_satu("SELECT COUNT(*) AS n FROM bookings WHERE id_user = %s",
+                       (id_user,))
+    if pakai["n"] > 0:
+        flash("User ini punya riwayat booking, tidak bisa dihapus.", "error")
+        return redirect("/admin")
+
+    jalankan("DELETE FROM users WHERE id_user = %s", (id_user,))
+    flash("User dihapus.", "ok")
+    return redirect("/admin")
+
+
+@app.route("/admin/addon/<int:id_addon>/hapus", methods=["POST"])
+@harus_admin
+def hapus_addon(id_addon):
+    pakai = ambil_satu("SELECT COUNT(*) AS n FROM booking_addons "
+                       "WHERE id_addon = %s", (id_addon,))
+    if pakai["n"] > 0:
+        flash("Add-on ini sudah dipakai di booking. Nonaktifkan saja.", "error")
+        return redirect("/admin")
+
+    jalankan("DELETE FROM addons WHERE id_addon = %s", (id_addon,))
+    flash("Add-on dihapus.", "ok")
+    return redirect("/admin")
+
+
 @app.route("/admin/addon/tambah", methods=["POST"])
 @harus_admin
 def tambah_addon():
@@ -446,7 +496,7 @@ def tambah_addon():
         return redirect("/admin")
 
     jalankan("INSERT INTO addons (nama_addon, harga) VALUES (%s, %s)",
-            (nama, harga))
+             (nama, harga))
     flash("Add-on ditambahkan.", "ok")
     return redirect("/admin")
 
@@ -459,7 +509,7 @@ def status_addon(id_addon):
         abort(400)
 
     jalankan("UPDATE addons SET status = %s WHERE id_addon = %s",
-            (baru, id_addon))
+             (baru, id_addon))
     flash("Status add-on diperbarui.", "ok")
     return redirect("/admin")
 
@@ -502,7 +552,7 @@ def api_harus_login(f):
 
 
 def data_user(u):
-    return {"id": u["id_user"], "name": u["nama"],
+    return {"id": u["id_user"], "name": u["username"],
             "username": u["username"], "role": u["role"]}
 
 
@@ -512,8 +562,8 @@ def data_user(u):
 def api_me():
     if "id_user" not in session:
         return jsonify({"loggedIn": False})
-    u = ambil_satu("SELECT id_user, nama, username, role FROM users "
-                "WHERE id_user = %s", (session["id_user"],))
+    u = ambil_satu("SELECT id_user, username, role FROM users "
+                   "WHERE id_user = %s", (session["id_user"],))
     if u is None:
         session.clear()
         return jsonify({"loggedIn": False})
@@ -540,11 +590,11 @@ def api_register():
         return api_error("Email is already registered.", 409)
 
     id_user = jalankan(
-        "INSERT INTO users (nama, username, email, password, role) "
-        "VALUES (%s, %s, %s, %s, 'customer')",
-        (username, username, email, generate_password_hash(password)))
+        "INSERT INTO users (username, email, password, role) "
+        "VALUES (%s, %s, %s, 'customer')",
+        (username, email, generate_password_hash(password)))
     return jsonify({"user": {"id": id_user, "name": username,
-                            "username": username, "role": "customer"}}), 201
+                             "username": username, "role": "customer"}}), 201
 
 
 @app.route("/api/login", methods=["POST"])
@@ -559,7 +609,7 @@ def api_login():
 
     session.clear()
     session["id_user"] = user["id_user"]
-    session["nama"] = user["nama"]
+    session["username"] = user["username"]
     session["role"] = user["role"]
     return jsonify({"user": data_user(user)})
 
@@ -581,9 +631,9 @@ def api_experiences():
             "id": a["id_addon"],
             "tab": a["nama_addon"],
             "title": a["nama_addon"],
-            "image": a["gambar"],
+            "image": None,
             "price": int(a["harga"]),
-            "description": a["deskripsi"],
+            "description": None,
             "available": a["status"].lower() == "tersedia",
         })
     return jsonify(hasil)
@@ -636,7 +686,7 @@ def api_ketersediaan():
         "  SELECT 1 FROM bookings b "
         "  WHERE b.id_room = r.id_room AND LOWER(b.status) <> 'batal' "
         "  AND b.tanggal_checkin < %s AND b.tanggal_checkout > %s) "
-        "ORDER BY r.harga_per_malam, r.nomor_kamar",
+        "ORDER BY r.harga_per_malam, r.id_room",
         (tamu, keluar, masuk))
 
     # kamar yang tipenya sama digabung jadi satu pilihan
@@ -701,7 +751,7 @@ def data_booking(b):
 
 
 SQL_BOOKING = ("SELECT b.*, r.tipe_kamar FROM bookings b "
-            "JOIN rooms r ON r.id_room = b.id_room ")
+               "JOIN rooms r ON r.id_room = b.id_room ")
 
 
 def booking_milik(ref):
@@ -721,7 +771,7 @@ def booking_milik(ref):
 @api_harus_login
 def api_daftar_booking():
     rows = ambil_semua(SQL_BOOKING + "WHERE b.id_user = %s "
-                    "ORDER BY b.id_booking DESC", (session["id_user"],))
+                       "ORDER BY b.id_booking DESC", (session["id_user"],))
     return jsonify([data_booking(b) for b in rows])
 
 
@@ -785,7 +835,7 @@ def api_buat_booking():
             "SELECT id_room, harga_per_malam FROM rooms "
             "WHERE tipe_kamar = %s AND LOWER(status) = 'tersedia' "
             "AND kapasitas >= %s "
-            "ORDER BY harga_per_malam, nomor_kamar FOR UPDATE", (tipe, tamu))
+            "ORDER BY harga_per_malam, id_room FOR UPDATE", (tipe, tamu))
 
         kamar = None
         for k in kandidat:
@@ -804,10 +854,10 @@ def api_buat_booking():
             "va_number, expires_at) "
             "VALUES (%s, %s, %s, %s, %s, %s, 'Menunggu', %s, %s, %s)",
             (session["id_user"], kamar["id_room"], masuk, keluar, tamu,
-            total, data["bank"], buat_va(), batas))
+             total, data["bank"], buat_va(), batas))
         for i in id_addon:
             jalankan("INSERT INTO booking_addons (id_booking, id_addon) "
-                    "VALUES (%s, %s)", (id_booking, i))
+                     "VALUES (%s, %s)", (id_booking, i))
         db.commit()
     except Exception:
         db.rollback()
@@ -834,7 +884,7 @@ def api_bayar(ref):
         return api_error("This booking has expired.", 409)
 
     jalankan("UPDATE bookings SET status = 'lunas' WHERE id_booking = %s",
-            (b["id_booking"],))
+             (b["id_booking"],))
     return jsonify({"ref": kode, "status": "paid"})
 
 
@@ -854,7 +904,7 @@ def api_batal(ref):
         return api_error("Paid bookings can only be cancelled by an admin.", 403)
 
     jalankan("UPDATE bookings SET status = 'batal' WHERE id_booking = %s",
-            (b["id_booking"],))
+             (b["id_booking"],))
     return jsonify({"ref": kode, "status": "cancelled"})
 
 

@@ -3,7 +3,7 @@
 
 {% block content %}
 <h1>Dashboard Admin</h1>
-<p>Selamat datang, {{ session.nama }}.</p>
+<p>Selamat datang, {{ session.username }}.</p>
 
 <div class="summary">
     <div class="card"><h3>Total Kamar</h3><p>{{ rooms|length }}</p></div>
@@ -14,18 +14,17 @@
 
 <!-- KAMAR -->
 <div class="card">
-    <h2>Data Kamar</h2>
+    <h2>Master Data Kamar</h2>
 
     <div class="table-wrap">
     <table>
         <tr>
-            <th>ID</th><th>Nomor</th><th>Tipe</th>
+            <th>ID</th><th>Tipe</th>
             <th>Harga per Malam</th><th>Kapasitas</th><th>Status</th><th>Aksi</th>
         </tr>
         {% for room in rooms %}
         <tr>
             <td>{{ room.id_room }}</td>
-            <td>{{ room.nomor_kamar }}</td>
             <td>{{ room.tipe_kamar }}</td>
             <td>{{ room.harga_per_malam|rupiah }}</td>
             <td>{{ room.kapasitas }} tamu</td>
@@ -46,10 +45,15 @@
                         <button class="btn small" type="submit">Aktifkan</button>
                     {% endif %}
                 </form>
+                <form class="inline" method="POST" action="/admin/kamar/{{ room.id_room }}/hapus"
+                    onsubmit="return confirm('Hapus kamar {{ room.tipe_kamar }}?')">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                    <button class="btn small danger" type="submit">Hapus</button>
+                </form>
             </td>
         </tr>
         {% else %}
-        <tr><td colspan="7">Belum ada data kamar.</td></tr>
+        <tr><td colspan="6">Belum ada data kamar.</td></tr>
         {% endfor %}
     </table>
     </div>
@@ -57,8 +61,6 @@
     <h3>Tambah Kamar</h3>
     <form method="POST" action="/admin/kamar/tambah" class="form-row">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-        <div><label>Nomor Kamar</label>
-            <input type="text" name="nomor_kamar" maxlength="10" required></div>
         <div><label>Tipe</label>
             <input type="text" name="tipe_kamar" maxlength="50" required></div>
         <div><label>Harga per Malam</label>
@@ -71,19 +73,27 @@
 
 <!-- USER -->
 <div class="card">
-    <h2>Data User</h2>
+    <h2>Master Data User</h2>
     <div class="table-wrap">
     <table>
-        <tr><th>ID User</th><th>Nama</th><th>Username</th><th>Role</th></tr>
+        <tr><th>ID User</th><th>Username</th><th>Email</th><th>Aksi</th></tr>
         {% for user in users %}
         <tr>
             <td>{{ user.id_user }}</td>
-            <td>{{ user.nama }}</td>
             <td>{{ user.username }}</td>
-            <td>{{ user.role }}</td>
+            <td>{{ user.email or '-' }}</td>
+            <td>
+                {% if user.id_user != session.id_user %}
+                <form class="inline" method="POST" action="/admin/user/{{ user.id_user }}/hapus"
+                    onsubmit="return confirm('Hapus user {{ user.username }}?')">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                    <button class="btn small danger" type="submit">Hapus</button>
+                </form>
+                {% endif %}
+            </td>
         </tr>
         {% else %}
-        <tr><td colspan="4">Belum ada data user.</td></tr>
+        <tr><td colspan="5">Belum ada data user.</td></tr>
         {% endfor %}
     </table>
     </div>
@@ -91,7 +101,7 @@
 
 <!-- BOOKING -->
 <div class="card">
-    <h2>Data Booking</h2>
+    <h2>Master Data Booking</h2>
     <div class="table-wrap">
     <table>
         <tr>
@@ -101,8 +111,8 @@
         {% for booking in bookings %}
         <tr>
             <td>{{ booking.id_booking }}</td>
-            <td>{{ booking.nama }}</td>
-            <td>{{ booking.nomor_kamar }}</td>
+            <td>{{ booking.username }}</td>
+            <td>{{ booking.tipe_kamar }}</td>
             <td>{{ booking.tanggal_checkin }}</td>
             <td>{{ booking.tanggal_checkout }}</td>
             <td>{{ booking.total_harga|rupiah }}</td>
@@ -126,7 +136,7 @@
 
 <!-- ADD-ON -->
 <div class="card">
-    <h2>Data Add-on</h2>
+    <h2>Master Data Add-on</h2>
     <div class="table-wrap">
     <table>
         <tr><th>ID</th><th>Nama Add-on</th><th>Harga</th><th>Status</th><th>Aksi</th></tr>
@@ -151,6 +161,11 @@
                         <input type="hidden" name="status" value="Tersedia">
                         <button class="btn small" type="submit">Aktifkan</button>
                     {% endif %}
+                </form>
+                <form class="inline" method="POST" action="/admin/addon/{{ addon.id_addon }}/hapus"
+                    onsubmit="return confirm('Hapus add-on {{ addon.nama_addon }}?')">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                    <button class="btn small danger" type="submit">Hapus</button>
                 </form>
             </td>
         </tr>

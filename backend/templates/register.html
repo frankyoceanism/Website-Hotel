@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Daftar{% endblock %}
+
+{% block content %}
+<div class="card narrow">
+    <h2 class="center">Daftar Akun</h2>
+    <p class="center muted">Buat akun untuk mulai memesan kamar.</p>
+
+    <form method="POST" action="/register">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username"
+            maxlength="50" autocomplete="username" required autofocus>
+
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email"
+            maxlength="100" autocomplete="email" required>
+
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password"
+            minlength="6" autocomplete="new-password" required>
+        <small class="muted">Minimal 6 karakter.</small>
+
+        <button type="submit" class="btn full">Daftar</button>
+    </form>
+
+    <p class="center muted" style="margin-top:20px;">
+        Sudah punya akun? <a class="link" href="/login">Login</a>
+    </p>
+</div>
+{% endblock %}

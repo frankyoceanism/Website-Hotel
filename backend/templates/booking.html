@@ -4,8 +4,7 @@
 {% block content %}
 <div class="card medium">
     <h1>Booking Kamar Hotel</h1>
-    <h2>Kamar {{ room.nomor_kamar }}</h2>
-    <p>Tipe: {{ room.tipe_kamar }}</p>
+    <h2>Kamar {{ room.tipe_kamar }}</h2>
     <p>Harga per malam: <strong>{{ room.harga_per_malam|rupiah }}</strong></p>
 
     <form method="POST" action="/bookings/{{ room.id_room }}" id="form-booking">

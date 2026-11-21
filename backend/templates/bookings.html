@@ -9,8 +9,8 @@
 
     <div class="card">
         <h2>Booking #{{ booking.id_booking }}</h2>
-        <p>Nama: {{ booking.nama }}</p>
-        <p>Kamar: {{ booking.nomor_kamar }} ({{ booking.tipe_kamar }})</p>
+        <p>Username: {{ booking.username }}</p>
+        <p>Kamar: {{ booking.tipe_kamar }}</p>
         <p>Check-in: {{ booking.tanggal_checkin }}</p>
         <p>Check-out: {{ booking.tanggal_checkout }}</p>
         <p class="total">Total: {{ booking.total_harga|rupiah }}</p>

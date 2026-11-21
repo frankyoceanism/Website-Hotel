@@ -8,8 +8,7 @@
 <div class="grid">
     {% for room in rooms %}
         <div class="card">
-            <h2>Kamar {{ room.nomor_kamar }}</h2>
-            <p>Tipe kamar: {{ room.tipe_kamar }}</p>
+            <h2>Kamar {{ room.tipe_kamar }}</h2>
             <p class="price">{{ room.harga_per_malam|rupiah }} <small>/ malam</small></p>
 
             {% if room.status == "Tersedia" %}
